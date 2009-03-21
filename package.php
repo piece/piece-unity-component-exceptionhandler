@@ -62,8 +62,22 @@ $package->setOptions(array('filelistgenerator' => 'file',
 
 $package->setPackage('Piece_Unity_Component_ExceptionHandler');
 $package->setPackageType('php');
-$package->setSummary('A utility package to handle exceptions by set_exception_handler()');
-$package->setDescription('A utility package to handle exceptions by set_exception_handler()');
+$package->setSummary('A component for exception handling');
+$package->setDescription('Piece_Unity_Component_ExceptionHandler provides a simple exception handling system which can be used in your bootstrap code as follows:
+
+webapp/config/bootstrap.php:
+
+<?php
+...
+Piece_Unity_Service_ExceptionHandler::register(new Piece_Unity_Service_ExceptionHandler_DebugInfo());
+...
+
+Built-in exception handlers are:
+
+Piece_Unity_Service_ExceptionHandler_DebugInfo: Outputs the exception details as a HTML page.
+Piece_Unity_Service_ExceptionHandler_InternalServerError: Logs the exception message using error_log() and outputs a typical "Internal Server Error" HTML page.
+
+Additionally, any exception handlers which implement the interface Piece_Unity_Service_ExceptionHandler_Interface can be used.');
 $package->setChannel('pear.piece-framework.com');
 $package->setLicense('New BSD License', 'http://www.opensource.org/licenses/bsd-license.php');
 $package->setAPIVersion($apiVersion);
