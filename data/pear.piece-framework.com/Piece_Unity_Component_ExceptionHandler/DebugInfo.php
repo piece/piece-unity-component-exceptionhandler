@@ -5,6 +5,7 @@
  * PHP version 5
  *
  * Copyright (c) 2009 KUBO Atsuhiro <kubo@iteman.jp>,
+ *               2009 KUBO Noriko <noricott@gmail.com>,
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -31,6 +32,7 @@
  * @package    Piece_Unity
  * @subpackage Piece_Unity_Component_ExceptionHandler
  * @copyright  2009 KUBO Atsuhiro <kubo@iteman.jp>
+ * @copyright  2009 KUBO Noriko <noricott@gmail.com>
  * @license    http://www.opensource.org/licenses/bsd-license.php  New BSD License
  * @version    Release: @package_version@
  * @since      File available since Release 0.1.0
@@ -40,46 +42,74 @@
 <html>
   <head>
     <title>Piece_Unity Debug Information</title>
+    <style type="text/css">
+body  {font-size: 0.78em; line-height:1.5; }
+h1  {clear: both; color: #AA1122; margin: 10px 0 0; }
+h2  {clear: both; color: #000000; font-size: 120%; margin: 10px 0 0; }
+h3  {background-color: #EAEAEA; border-bottom: 1px solid #DDDDDD; color: #666666; font-size: 90%; overflow: hidden; padding: 0.5em 1em; margin: 0; }
+div.group  {border-bottom: 2px solid #AAAAAA; display: block; }
+div.key  {border-top: 1px solid #AAAAAA; color: #666666; float: left; padding: 0 5px; width: 160px; }
+div.value  {border-top: 1px solid #AAAAAA; overflow: auto; padding: 0 5px; }
+div.source  {border-color: #DDDDDD; border-width: 0 1px 1px; border-style: none solid solid; display: block; }
+div.line_numbers  {background-color: #ECECEC; border-right: 1px solid #DDDDDD; color: #AAAAAA; float: left; padding: 0; text-align: right; width:60px; }
+div.codearea {overflow: auto; }
+div.source span {padding: 0 5px 0; }
+div.source span.highlight  {background-color: #AA1122; color: #ffffff; display: block; margin: 0 0 -1.2em; }
+dl  {margin: 0; }
+dt  {border-top: 1px solid #AAAAAA; color: #666666; float: left; padding: 0 5px; width: 50px; }
+dd  {border-top: 1px solid #AAAAAA; display: block; margin: 0 0 0 50px; padding: 0 5px; }
+pre {-x-system-font: none; font-family:'andale mono','lucida console',monospace; font-size-adjust: none; font-style: normal; font-variant: normal; font-weight: normal; line-height: normal; margin: 0; }
+div.copyright  {color: #AA1122; font-size: 90%; margin: 10px 10px 20px; text-align: right; }
+    </style>
   </head>
   <body>
     <h1>Piece_Unity Debug Information</h1>
 
     <h2>Context</h2>
-    <dl>
-      <dt>REQUEST_METHOD</dt>
-      <dd><?php echo htmlentities($_SERVER['REQUEST_METHOD'], ENT_QUOTES) ?></dd>
-      <dt>REQUEST_URI</dt>
-      <dd><?php echo htmlentities($_SERVER['REQUEST_URI'], ENT_QUOTES) ?></dd>
-    </dl>
+      <div class="group">
+        <div class="key">REQUEST_METHOD</div>
+        <div class="value"><?php echo htmlspecialchars($_SERVER['REQUEST_METHOD'], ENT_QUOTES) ?></div>
+        <div class="key">REQUEST_URI</div>
+        <div class="value"><?php echo htmlspecialchars($_SERVER['REQUEST_URI'], ENT_QUOTES) ?></div>
+      </div>
 
     <h2>Exception</h2>
-    <dl>
-      <dt>Message</dt>
-      <dd><?php echo nl2br($debugInfo->exception->getMessage()) ?></dd>
-      <dt>Code</dt>
-      <dd><?php echo htmlentities($debugInfo->exception->getCode(), ENT_QUOTES) ?></dd>
-      <dt>Class</dt>
-      <dd><?php echo htmlentities(get_class($debugInfo->exception), ENT_QUOTES) ?></dd>
-      <dt>File</dt>
-      <dd><?php echo htmlentities($debugInfo->exception->getFile(), ENT_QUOTES) ?></dd>
-      <dt>Line</dt>
-      <dd><?php echo htmlentities($debugInfo->exception->getLine(), ENT_QUOTES) ?></dd>
-    </dl>
+      <div class="group">
+        <div class="key">Message</div>
+        <div class="value"><pre><?php echo htmlspecialchars($debugInfo->exception->getMessage(), ENT_QUOTES) ?></pre></div>
+        <div class="key">Code</div>
+        <div class="value"><?php echo htmlspecialchars($debugInfo->exception->getCode(), ENT_QUOTES) ?></div>
+        <div class="key">Class</div>
+        <div class="value"><?php echo htmlspecialchars(get_class($debugInfo->exception), ENT_QUOTES) ?></div>
+        <div class="key">File</div>
+        <div class="value"><?php echo htmlspecialchars($debugInfo->exception->getFile(), ENT_QUOTES) ?></div>
+        <div class="key">Line</div>
+        <div class="value"><?php echo htmlspecialchars($debugInfo->exception->getLine(), ENT_QUOTES) ?></div>
+      </div>
 
     <h2>Source</h2>
-    <h3><?php echo htmlentities($debugInfo->exception->getFile(), ENT_QUOTES) . ':' ?></h3>
-    <dl>
-<?php foreach ($debugInfo->source as $source): ?>
-      <dt><?php echo htmlentities($source->line, ENT_QUOTES) ?></dt>
-      <dd><?php echo htmlentities($source->code, ENT_QUOTES) ?></dd>
-    </dl>
-<?php endforeach; ?>
+    <h3><?php echo htmlspecialchars($debugInfo->exception->getFile(), ENT_QUOTES) ?></h3>
+    <div class="source">
+      <div class="line_numbers">
+        <pre><?php foreach ($debugInfo->source as $source): ?><span<?php if ($debugInfo->exception->getLine() == $source->line): ?> class="highlight"<?php endif; ?>><?php echo htmlspecialchars($source->line, ENT_QUOTES) ?></span>
+<?php endforeach; ?></pre>
+      </div>
+      <div class="codearea">
+        <pre><?php foreach ($debugInfo->source as $source): ?><span<?php if ($debugInfo->exception->getLine() == $source->line): ?> class="highlight"<?php endif; ?>><?php echo htmlspecialchars(preg_replace('/^$/', ' ', $source->code), ENT_QUOTES) ?></span>
+<?php endforeach; ?></pre>
+      </div>
+    </div>
 
     <h2>Trace</h2>
-    <ol start="0">
-<?php foreach ($debugInfo->trace as $invocation): ?>
-      <li><?php echo htmlentities($invocation, ENT_QUOTES) ?></li>
-<?php endforeach; ?>
-    </ol>
+    <div class="group">
+      <dl>
+<?php for ($i = 0, $count = count($debugInfo->trace); $i < $count; ++$i): ?>
+        <dt>#<?php echo $i ?></dt>
+        <dd><?php echo htmlspecialchars($debugInfo->trace[$i], ENT_QUOTES) ?></dd>
+<?php endfor; ?>
+      </dl>
+    </div>
+    
+    <div class="copyright">Copyright &copy; 2009 Piece Project, All rights reserved.</div>
   </body>
 </html>
