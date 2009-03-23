@@ -43,27 +43,29 @@
   <head>
     <title>Piece_Unity Debug Information</title>
     <style type="text/css">
-body  {font-size: 0.78em; line-height:1.5; }
-h1  {clear: both; color: #AA1122; margin: 10px 0 0; }
-h2  {clear: both; color: #000000; font-size: 120%; margin: 10px 0 0; }
-h3  {background-color: #EAEAEA; border-bottom: 1px solid #DDDDDD; color: #666666; font-size: 90%; overflow: hidden; padding: 0.5em 1em; margin: 0; }
-div.group  {border-bottom: 2px solid #AAAAAA; display: block; }
-div.key  {border-top: 1px solid #AAAAAA; color: #666666; float: left; padding: 0 5px; width: 160px; }
-div.value  {border-top: 1px solid #AAAAAA; overflow: auto; padding: 0 5px; }
-div.source  {border-color: #DDDDDD; border-width: 0 1px 1px; border-style: none solid solid; display: block; }
-div.line_numbers  {background-color: #ECECEC; border-right: 1px solid #DDDDDD; color: #AAAAAA; float: left; padding: 0; text-align: right; width:60px; }
-div.codearea {overflow: auto; }
-div.source span {padding: 0 5px 0; }
-div.source span.highlight  {background-color: #AA1122; color: #ffffff; display: block; margin: 0 0 -1.2em; }
-dl  {margin: 0; }
-dt  {border-top: 1px solid #AAAAAA; color: #666666; float: left; padding: 0 5px; width: 50px; }
-dd  {border-top: 1px solid #AAAAAA; display: block; margin: 0 0 0 50px; padding: 0 5px; }
-pre {-x-system-font: none; font-family:'andale mono','lucida console',monospace; font-size-adjust: none; font-style: normal; font-variant: normal; font-weight: normal; line-height: normal; margin: 0; }
-div.copyright  {color: #AA1122; font-size: 90%; margin: 10px 10px 20px; text-align: right; }
+body { font-family: sans-serif; font-size: 0.78em; line-height:1.5; }
+h1 { clear: both; color: #AA1122; margin: 10px 0 0; }
+h1.message { background-color: #ECECEC; color: #000000; font-size: 150%; font-weight: bold; margin: 5px 0; padding: 0 10px; }
+h2 { clear: both; color: #000000; font-size: 120%; margin: 10px 0 0; }
+h3 { background-color: #EAEAEA; color: #333333; font-size: 90%; overflow: hidden; padding: 0.5em 1em; margin: 0; }
+div.group { border-bottom: 2px solid #AAAAAA; display: block; }
+div.key { border-top: 1px solid #CCCCCC; color: #666666; float: left; padding: 0 5px; width: 160px; }
+div.value { border-top: 1px solid #CCCCCC; overflow: auto; padding: 0 5px; }
+ol.source { background-color: #ECECEC; border: 1px solid #AAAAAA; color: #AAAAAA; font-family: 'andale mono','lucida console',monospace; margin:0 0 2em !important; padding:0 0 0 60px !important; word-break: break-all; }
+ol.source li { background-color: #FFFFFF; margin: 1px 1px; padding: 0; }
+ol.source li code { color: #000000; }
+ol.source li.highlight { background-color: #AA1122; color: #AA1122; font-weight: bold; }
+ol.source li.highlight code { color: #FFFFFF; font-weight: normal; }
+pre { font-family: sans-serif; margin: 0; }
+dl { margin: 0; }
+dt { border-top: 1px solid #CCCCCC; color: #666666; float: left; padding: 0 5px; width: 50px; }
+dd { border-top: 1px solid #CCCCCC; display: block; margin: 0 0 0 50px; padding: 0 5px; }
+div.copyright { color: #AA1122; font-size: 90%; margin: 10px 10px 20px; text-align: right; }
     </style>
   </head>
   <body>
     <h1>Piece_Unity Debug Information</h1>
+                <h1 class="message"><?php echo htmlspecialchars(preg_replace('/^([^\x0d\x0a]+).*/ms', '$1', $debugInfo->exception->getMessage()), ENT_QUOTES) ?></h1>
 
     <h2>Context</h2>
       <div class="group">
@@ -76,7 +78,7 @@ div.copyright  {color: #AA1122; font-size: 90%; margin: 10px 10px 20px; text-ali
     <h2>Exception</h2>
       <div class="group">
         <div class="key">Message</div>
-        <div class="value"><pre><?php echo htmlspecialchars($debugInfo->exception->getMessage(), ENT_QUOTES) ?></pre></div>
+        <div class="value"><pre><?php echo htmlspecialchars(preg_replace('/^$/', ' ', $debugInfo->exception->getMessage()), ENT_QUOTES) ?></pre></div>
         <div class="key">Code</div>
         <div class="value"><?php echo htmlspecialchars($debugInfo->exception->getCode(), ENT_QUOTES) ?></div>
         <div class="key">Class</div>
@@ -89,16 +91,11 @@ div.copyright  {color: #AA1122; font-size: 90%; margin: 10px 10px 20px; text-ali
 
     <h2>Source</h2>
     <h3><?php echo htmlspecialchars($debugInfo->exception->getFile(), ENT_QUOTES) ?></h3>
-    <div class="source">
-      <div class="line_numbers">
-        <pre><?php foreach ($debugInfo->source as $source): ?><span<?php if ($debugInfo->exception->getLine() == $source->line): ?> class="highlight"<?php endif; ?>><?php echo htmlspecialchars($source->line, ENT_QUOTES) ?></span>
-<?php endforeach; ?></pre>
-      </div>
-      <div class="codearea">
-        <pre><?php foreach ($debugInfo->source as $source): ?><span<?php if ($debugInfo->exception->getLine() == $source->line): ?> class="highlight"<?php endif; ?>><?php echo htmlspecialchars(preg_replace('/^$/', ' ', $source->code), ENT_QUOTES) ?></span>
-<?php endforeach; ?></pre>
-      </div>
-    </div>
+    <ol class="source" start="<?php echo htmlspecialchars($debugInfo->source[0]->line, ENT_QUOTES) ?>">
+      <?php foreach ($debugInfo->source as $source): ?>
+      <li<?php if ($debugInfo->exception->getLine() == $source->line): ?> class="highlight"<?php endif; ?>><code><?php echo str_replace(' ', '&nbsp;', htmlspecialchars(preg_replace('/^$/', ' ', $source->code), ENT_QUOTES)) ?></code></li>
+      <?php endforeach; ?>
+    </ol>
 
     <h2>Trace</h2>
     <div class="group">
