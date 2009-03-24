@@ -70,12 +70,17 @@ webapp/config/bootstrap.php:
 <?php
 ...
 Piece_Unity_Service_ExceptionHandler::register(new Piece_Unity_Service_ExceptionHandler_DebugInfo());
+Piece_Unity_Service_ExceptionHandler::register(new Piece_Unity_Service_ExceptionHandler_ErrorLog());
+Piece_Unity_Service_ExceptionHandler::enable();
 ...
+
+The last one registered will be the first one called.
 
 Built-in exception handlers are:
 
 Piece_Unity_Service_ExceptionHandler_DebugInfo: Outputs the exception details as a HTML page.
-Piece_Unity_Service_ExceptionHandler_InternalServerError: Logs the exception message using error_log() and outputs a typical "Internal Server Error" HTML page.
+Piece_Unity_Service_ExceptionHandler_ErrorLog: Logs the exception message by error_log().
+Piece_Unity_Service_ExceptionHandler_InternalServerError: Outputs a typical "Internal Server Error" HTML page.
 
 Additionally, any exception handlers which implement the interface Piece_Unity_Service_ExceptionHandler_Interface can be used.');
 $package->setChannel('pear.piece-framework.com');
@@ -90,7 +95,10 @@ $package->setPearinstallerDep('1.4.3');
 $package->addPackageDepWithChannel('required', 'Piece_Unity', 'pear.piece-framework.com', '1.5.0');
 $package->addPackageDepWithChannel('required', 'Stagehand_HTTP_Status', 'pear.piece-framework.com', '1.0.0');
 $package->addPackageDepWithChannel('required', 'Stagehand_LegacyError', 'pear.piece-framework.com', '0.1.0');
+$package->addExtensionDep('required', 'pcre');
+$package->addExtensionDep('required', 'date');
 $package->addMaintainer('lead', 'iteman', 'KUBO Atsuhiro', 'kubo@iteman.jp');
+$package->addMaintainer('helper', 'noricot', 'KUBO Noriko', 'noricott@gmail.com');
 $package->addGlobalReplacement('package-info', '@package_version@', 'version');
 $package->generateContents();
 
