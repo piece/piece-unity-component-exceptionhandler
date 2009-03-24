@@ -69,6 +69,8 @@ div.copyright { color: #AA1122; font-size: 90%; margin: 10px 10px 20px; text-ali
 
     <h2>Context</h2>
       <div class="group">
+        <div class="key">Time</div>
+        <div class="value"><?php echo strftime('%Y-%m-%d %H:%M:%S %z') ?></div>
         <div class="key">REQUEST_METHOD</div>
         <div class="value"><?php echo htmlspecialchars($_SERVER['REQUEST_METHOD'], ENT_QUOTES) ?></div>
         <div class="key">REQUEST_URI</div>
