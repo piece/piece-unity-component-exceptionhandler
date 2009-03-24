@@ -67,7 +67,7 @@ class Piece_Unity_Service_ExceptionHandler
      * @access private
      */
 
-    private static $_exceptionHandler;
+    private static $_exceptionHandlers = array();
 
     /**#@-*/
 
@@ -83,13 +83,35 @@ class Piece_Unity_Service_ExceptionHandler
      */
     public static function register(Piece_Unity_Service_ExceptionHandler_Interface $exceptionHandler)
     {
-        self::$_exceptionHandler = $exceptionHandler;
+        self::$_exceptionHandlers[] = $exceptionHandler;
+    }
 
+    // }}}
+    // {{{ enable()
+
+    /**
+     */
+    public static function enable()
+    {
         Stagehand_LegacyError_PHPError::enableConversion();
         Stagehand_LegacyError_PEARError::enableConversion();
         Stagehand_LegacyError_PEARErrorStack::enableConversion();
 
         set_exception_handler(array(__CLASS__, 'handle'));
+    }
+
+    // }}}
+    // {{{ disable()
+
+    /**
+     */
+    public static function disable()
+    {
+        restore_exception_handler();
+
+        Stagehand_LegacyError_PEARErrorStack::disableConversion();
+        Stagehand_LegacyError_PEARError::disableConversion();
+        Stagehand_LegacyError_PHPError::disableConversion();
     }
 
     // }}}
@@ -104,7 +126,9 @@ class Piece_Unity_Service_ExceptionHandler
             ob_end_clean();
         }
 
-        self::$_exceptionHandler->handle($exception);
+        foreach (self::$_exceptionHandlers as $exceptionHandler) {
+            $exceptionHandler->handle($exception);
+        }
     }
 
     /**#@-*/
