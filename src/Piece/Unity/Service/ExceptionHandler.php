@@ -39,6 +39,24 @@
 // {{{ Piece_Unity_Service_ExceptionHandler
 
 /**
+ * A class for exception handling.
+ *
+ * Piece_Unity_Component_ExceptionHandler provides a simple exception handling system
+ * which can be used in your bootstrap code as follows:
+ *
+ * webapp/config/bootstrap.php:
+ *
+ * <code>
+ * <?php
+ * ...
+ * Piece_Unity_Service_ExceptionHandler::register(new Piece_Unity_Service_ExceptionHandler_DebugInfo());
+ * Piece_Unity_Service_ExceptionHandler::register(new Piece_Unity_Service_ExceptionHandler_ErrorLog());
+ * Piece_Unity_Service_ExceptionHandler::enable();
+ * ...
+ * </code>
+ *
+ * The last one registered will be the first one called.
+ *
  * @package    Piece_Unity
  * @subpackage Piece_Unity_Component_ExceptionHandler
  * @copyright  2009 KUBO Atsuhiro <kubo@iteman.jp>
