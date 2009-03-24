@@ -33,11 +33,10 @@
  * @copyright  2009 KUBO Atsuhiro <kubo@iteman.jp>
  * @license    http://www.opensource.org/licenses/bsd-license.php  New BSD License
  * @version    Release: @package_version@
- * @link       http://d.hatena.ne.jp/perezvon/20070227/1172572129
  * @since      File available since Release 0.1.0
  */
 
-// {{{ Piece_Unity_Service_ExceptionHandler_DebugInfo
+// {{{ Piece_Unity_Service_ExceptionHandler_Rendering_PHP
 
 /**
  * @package    Piece_Unity
@@ -45,10 +44,9 @@
  * @copyright  2009 KUBO Atsuhiro <kubo@iteman.jp>
  * @license    http://www.opensource.org/licenses/bsd-license.php  New BSD License
  * @version    Release: @package_version@
- * @link       http://d.hatena.ne.jp/perezvon/20070227/1172572129
  * @since      Class available since Release 0.1.0
  */
-class Piece_Unity_Service_ExceptionHandler_DebugInfo implements Piece_Unity_Service_ExceptionHandler_Interface
+class Piece_Unity_Service_ExceptionHandler_Rendering_PHP
 {
 
     // {{{ properties
@@ -76,24 +74,25 @@ class Piece_Unity_Service_ExceptionHandler_DebugInfo implements Piece_Unity_Serv
      */
 
     // }}}
-    // {{{ handle()
+    // {{{ render()
 
     /**
-     * @param Exception $exception
+     * @param string                  $file
+     * @param Piece_Unity_ViewElement $viewElement
      */
-    public function handle(Exception $exception)
+    public static function render($file, Piece_Unity_ViewElement $viewElement)
     {
-        $viewElement = new Piece_Unity_ViewElement();
-        $viewElement->setElement('debugInfo',
-             (object)array('exception' => $exception,
-                           'source' => $this->_ripSource($exception->getFile(), $exception->getLine(), 5),
-                           'trace' => preg_replace('/^#\d+ /', '', explode("\n", $exception->getTraceAsString())))
-                                 );
+        $rendering = new Piece_Unity_Service_Rendering_PHP();
 
-        Piece_Unity_Service_ExceptionHandler_Rendering_PHP::render(
-            dirname(__FILE__) . '/../../../../../data/pear.piece-framework.com/Piece_Unity_Component_ExceptionHandler/' . basename(__FILE__),
-            $viewElement
-                                                                  );
+        ob_start();
+        $rendering->render($file, $viewElement);
+        $html = ob_get_contents();
+        ob_end_clean();
+
+        Stagehand_HTTP_Status::send(500);
+        header('Content-Type: text/html; charset=UTF-8');
+
+        echo $html;
     }
 
     /**#@-*/
@@ -107,42 +106,6 @@ class Piece_Unity_Service_ExceptionHandler_DebugInfo implements Piece_Unity_Serv
     /**#@+
      * @access private
      */
-
-    // }}}
-    // {{{ _ripSource()
-
-    /**
-     * @param string  $file
-     * @param integer $targetLine
-     * @param integer $limit
-     * @return string
-     */
-    private function _ripSource($file, $targetLine, $limit)
-    {
-        $startLine = $targetLine - $limit;
-        if ($startLine < 1) {
-            $startLine = 1;
-        }
-
-        $source = array();
-        $handle = fopen($file, 'r');
-        for ($currentLine = 1; !feof($handle); ++$currentLine) {
-            if ($currentLine < $startLine) {
-                fgets($handle, 4096);
-                continue;
-            }
-
-            if ($currentLine > $targetLine + $limit) {
-                break;
-            }
-
-            $code = rtrim(fgets($handle, 4096), "\x0d\x0a");
-            $source[] = (object)array('line' => $currentLine, 'code' => $code);
-        }
-        fclose($handle);
-
-        return $source;
-    }        
 
     /**#@-*/
 
