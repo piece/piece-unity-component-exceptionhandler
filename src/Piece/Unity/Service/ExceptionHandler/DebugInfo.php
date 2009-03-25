@@ -86,7 +86,7 @@ class Piece_Unity_Service_ExceptionHandler_DebugInfo implements Piece_Unity_Serv
         $viewElement = new Piece_Unity_ViewElement();
         $viewElement->setElement('debugInfo',
              (object)array('exception' => $exception,
-                           'source' => $this->_ripSource($exception->getFile(), $exception->getLine(), 5),
+                           'source' => $this->_ripSource($exception->getFile(), $exception->getLine(), 10),
                            'trace' => preg_replace('/^#\d+ /', '', explode("\n", $exception->getTraceAsString())))
                                  );
 
