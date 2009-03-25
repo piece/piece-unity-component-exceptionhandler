@@ -89,8 +89,10 @@ class Piece_Unity_Service_ExceptionHandler_Rendering_PHP
         $html = ob_get_contents();
         ob_end_clean();
 
-        Stagehand_HTTP_Status::send(500);
-        header('Content-Type: text/html; charset=UTF-8');
+        if (!headers_sent()) {
+            Stagehand_HTTP_Status::send(500);
+            header('Content-Type: text/html; charset=UTF-8');
+        }
 
         echo $html;
     }
