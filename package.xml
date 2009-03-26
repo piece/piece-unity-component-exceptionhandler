@@ -38,18 +38,23 @@ Additionally, any exception handlers which implement the interface Piece_Unity_S
   <email>noricott@gmail.com</email>
   <active>yes</active>
  </helper>
- <date>2009-03-24</date>
- <time>18:42:34</time>
+ <date>2009-03-26</date>
+ <time>16:22:29</time>
  <version>
-  <release>0.1.0</release>
-  <api>0.1.0</api>
+  <release>0.2.0</release>
+  <api>0.2.0</api>
  </version>
  <stability>
   <release>beta</release>
   <api>beta</api>
  </stability>
  <license uri="http://www.opensource.org/licenses/bsd-license.php">New BSD License</license>
- <notes>The first beta release of Piece_Unity_Component_ExceptionHandler.</notes>
+ <notes>A new release of Piece_Unity_Component_ExceptionHandler is now available.
+
+What&apos;s New in Piece_Unity_Component_ExceptionHandler 0.2.0
+
+ * Improved the DebugInfo exception handler: The limit of the ripped source line has been changed to 21. (10 + 1 + 10)
+ * Improved HTML rendering: The behavior of HTML rendering has been changed so as to send the HTTP status line and Content-Type header only if the headers haven&apos;t been sent.</notes>
  <contents>
   <dir baseinstalldir="/" name="/">
    <dir name="data">
@@ -134,6 +139,24 @@ Additionally, any exception handlers which implement the interface Piece_Unity_S
  </dependencies>
  <phprelease />
  <changelog>
+  <release>
+   <version>
+    <release>0.2.0</release>
+    <api>0.2.0</api>
+   </version>
+   <stability>
+    <release>beta</release>
+    <api>beta</api>
+   </stability>
+   <date>2009-03-26</date>
+   <license uri="http://www.opensource.org/licenses/bsd-license.php">New BSD License</license>
+   <notes>A new release of Piece_Unity_Component_ExceptionHandler is now available.
+
+What&apos;s New in Piece_Unity_Component_ExceptionHandler 0.2.0
+
+ * Improved the DebugInfo exception handler: The limit of the ripped source line has been changed to 21. (10 + 1 + 10)
+ * Improved HTML rendering: The behavior of HTML rendering has been changed so as to send the HTTP status line and Content-Type header only if the headers haven&apos;t been sent.</notes>
+  </release>
   <release>
    <version>
     <release>0.1.0</release>

@@ -41,11 +41,16 @@ require_once 'PEAR.php';
 
 PEAR::staticPushErrorHandling(PEAR_ERROR_CALLBACK, create_function('$error', 'var_dump($error); exit();'));
 
-$releaseVersion = '0.1.0';
+$releaseVersion = '0.2.0';
 $releaseStability = 'beta';
-$apiVersion = '0.1.0';
+$apiVersion = '0.2.0';
 $apiStability = 'beta';
-$notes = 'The first beta release of Piece_Unity_Component_ExceptionHandler.';
+$notes = 'A new release of Piece_Unity_Component_ExceptionHandler is now available.
+
+What\'s New in Piece_Unity_Component_ExceptionHandler 0.2.0
+
+ * Improved the DebugInfo exception handler: The limit of the ripped source line has been changed to 21. (10 + 1 + 10)
+ * Improved HTML rendering: The behavior of HTML rendering has been changed so as to send the HTTP status line and Content-Type header only if the headers haven\'t been sent.';
 
 $package = new PEAR_PackageFileManager2();
 $package->setOptions(array('filelistgenerator' => 'file',
@@ -55,8 +60,7 @@ $package->setOptions(array('filelistgenerator' => 'file',
                            'packagefile'       => 'package.xml',
                            'packagedirectory'  => '.',
                            'dir_roles'         => array('doc' => 'doc',
-                                                        'src' => 'php',
-                                                        'tests' => 'test'),
+                                                        'src' => 'php'),
                            'ignore'            => array('package.php'))
                      );
 
