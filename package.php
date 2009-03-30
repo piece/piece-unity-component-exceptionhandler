@@ -84,7 +84,7 @@ Built-in exception handlers are:
 
 Piece_Unity_Service_ExceptionHandler_DebugInfo: Outputs the exception details as a HTML page.
 Piece_Unity_Service_ExceptionHandler_ErrorLog: Logs the exception message by error_log().
-Piece_Unity_Service_ExceptionHandler_InternalServerError: Outputs a typical "Internal Server Error" HTML page.
+Piece_Unity_Service_ExceptionHandler_InternalServerError: Outputs a typical *Internal Server Error* HTML page.
 
 Additionally, any exception handlers which implement the interface Piece_Unity_Service_ExceptionHandler_Interface can be used.');
 $package->setChannel('pear.piece-framework.com');
